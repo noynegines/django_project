@@ -218,6 +218,25 @@ def AdminGroupActivitiesTable(request):
     return render(request,'Admin1/showGroupActivies.html',context )
 
 
+def adminShowRegisters(request):
+    x = []
+    inX = []
+
+    value = RegisterChild.objects.all()
+    for item in value:
+        inX.append(item.ID_P)
+        inX.append(item.ID_C)
+        inX.append(item.FName_C)
+        inX.append(item.LName_C)
+        inX.append(item.Age_C)
+        inX.append(item.Phone_P)
+        inX.append(item.idClass)
+        x.append(inX)
+        inX = []
+
+    context = {'x': x}
+    return render(request, 'Admin1/showRegisters.html', context)
+
 def registerToClass(request):
     #regTOclass = registerToClassForm()
     #context = {'registertoclass': regTOclass}

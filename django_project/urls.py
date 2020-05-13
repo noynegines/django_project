@@ -36,6 +36,6 @@ urlpatterns = [
     path('childrenList/', user_views.childrenList, name='childrenList'),
     path('editDetails/', user_views.editDetails, name='editDetails'),
     path('ShowMyClass/', user_views.ShowMyClass, name='ShowMyClass'),
-
+    path('AdminShowRegisters/',user_views.adminShowRegisters,name ='AdminShowRegisters'),
 
 ]
