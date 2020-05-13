@@ -291,8 +291,31 @@ def registerToClass(request):
     return render(request, 'simpleuser/registerToClass.html', context)
 
 
-def showMyClasses(request):
-    return render(request, 'simpleuser/showMyClasses.html')
+def showMyClasses(request): #לקוח
+    x = []
+    inX = []
+    tid = request.user.id
+    value = RegisterChild.objects.all()
+
+    with open('users/classes.json' , encoding="utf8" ) as db:
+        MyClass=json.load(db)
+
+    for item in value:
+        if int(tid) == int(item.ID_P):
+            for t in MyClass:
+                if int(t["idC"]) == int(item.idClass):
+                    inX.append(item.ID_C)
+                    inX.append(item.FName_C)
+                    inX.append(item.LName_C)
+                    inX.append(item.Age_C)
+                    inX.append(item.Phone_P)
+                    inX.append(t["location"])
+                    inX.append(t["class-name"])
+                    x.append(inX)
+                    inX = []
+
+    context = {'x': x}
+    return render(request, 'simpleuser/showMyClasses.html',context)
 
 def TeacherDetail(request):
     return render(request, 'simpleuser/TeacherDetail.html')
@@ -303,7 +326,7 @@ def childrenList(request):
 def editDetails(request):
     return render(request, 'guide/editDetails.html')
 
-def ShowMyClass(request):
+def ShowMyClass(request): #מדריך
     tid = request.user.userprofile.t_id
     x = []
     inX = []
