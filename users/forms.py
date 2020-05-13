@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserProfile
+from .models import UserProfile, RegisterChild 
+import json
 
 
 class UserRegisterForm(UserCreationForm):
@@ -86,3 +87,27 @@ class addGroupActiviesForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['ageMax','ageMin' ,'nameClas' , 'given_id']
+
+
+class registerToClassForm(forms.ModelForm):
+
+    ID_C = forms.CharField(max_length=9, min_length=9,widget=forms.TextInput(attrs={'type':'number','min':'0'}), label='ID child')
+    FName_C = forms.CharField(max_length=30, label='First name')
+    LName_C = forms.CharField(max_length=30, label='Last name')
+    Age_C = forms.CharField(max_length=2, min_length=1, widget=forms.TextInput(attrs={'type': 'number', 'min': '0'}),label='Age')
+    Phone_P = forms.CharField(max_length=10, min_length=10,widget=forms.TextInput(attrs={'type':'number','min':'0'}), label='Phone')
+
+    with open('users/classes.json', encoding="utf8") as db:
+        Ttable = json.load(db)
+    CHOICES = ()
+    for x in Ttable:
+        CHOICES = CHOICES + (
+        (x["idC"], x["location"] + " " + x["neighborhood"] + " " + x["class-name"] + " " + x["min-age"] + "-" + x["max-age"]),)
+
+
+    select = forms.CharField(widget=forms.Select(choices=CHOICES))
+
+    class Meta:
+        model = User
+        fields = ['ID_C','FName_C' ,'LName_C' , 'Age_C','Phone_P']
+

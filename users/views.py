@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm
-from users.models import UserProfile 
+from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm,registerToClassForm
+from users.models import UserProfile , RegisterChild
 import json
 #import requests
 
@@ -70,7 +70,6 @@ def DeleteTeacher(request):
     if request.method == 'POST':
         deleteProfileForm = DeleteProfileForm(request.POST)
         Ttable = UserProfile.objects.all()
-        
         if deleteProfileForm.is_valid() :
             deleteProfileForm.given_id = deleteProfileForm.cleaned_data.get('given_id')
             all_tids = UserProfile.objects.values_list('t_id', flat=True).distinct()
@@ -125,7 +124,7 @@ def GroupActivitiesTable(request):
                     inX.append(row["class-name"])
                     inX.append(row["min-age"])
                     inX.append(row["max-age"])
-                    #inX.append(row["guide"])
+                    inX.append(row["idC"])
                     x.append(inX)
                     inX=[]
 
@@ -220,7 +219,58 @@ def AdminGroupActivitiesTable(request):
 
 
 def registerToClass(request):
-    return render(request, 'simpleuser/registerToClass.html')
+    #regTOclass = registerToClassForm()
+    #context = {'registertoclass': regTOclass}
+    #return render(request, 'simpleuser/registerToClass.html', context)
+    
+    if request.method == 'POST':
+        RegisterToClassForm = registerToClassForm(request.POST)
+
+        if RegisterToClassForm.is_valid():
+            context = {'RegisterToClassForm': RegisterToClassForm}
+            ID_P = request.user.id
+            ID_C = RegisterToClassForm.cleaned_data.get('ID_C')
+            FName_C = RegisterToClassForm.cleaned_data.get('FName_C')
+            LName_C = RegisterToClassForm.cleaned_data.get('LName_C')
+            Age_C = RegisterToClassForm.cleaned_data.get('Age_C')
+            Phone_P = RegisterToClassForm.cleaned_data.get('Phone_P')
+            IDclass = RegisterToClassForm.cleaned_data.get('select')
+            #RegisterToClassForm.save()
+            t = RegisterChild.objects.all()
+
+            for item in t:
+                if item.ID_C == ID_C and (item.FName_C != FName_C or item.LName_C != LName_C):
+                    messages.warning(request, f'your id is already exist whit other name')
+                    return render(request, 'simpleuser/registerToClass.html', context)
+
+                if item.ID_C == ID_C and item.idClass == IDclass :
+                    messages.warning(request, f'you are already sign to this class')
+                    return render(request, 'simpleuser/registerToClass.html', context)
+
+                with open('users/classes.json', encoding="utf8") as db:
+                    MyClass = json.load(db)
+
+                for row in MyClass:
+                    if row["idC"] == int(IDclass) :
+                        minA =row["min-age"]
+                        maxA = row["max-age"]
+                        if int(Age_C) > int(maxA) or int(Age_C) < int(minA) :
+                            messages.warning(request, f'your age is not in the range')
+                            return render(request, 'simpleuser/registerToClass.html', context)
+
+            rc = RegisterChild(ID_P=ID_P , ID_C=ID_C , FName_C = FName_C , LName_C = LName_C , Age_C = Age_C ,
+            Phone_P = Phone_P , idClass = IDclass )
+            rc.save()
+            messages.success(request, f' The registration for the class was successful !')
+            return render(request, 'simpleuser/homeSimpleuser.html',context)
+        
+    else:
+        RegisterToClassForm = registerToClassForm()
+
+
+    context = {'RegisterToClassForm': RegisterToClassForm }
+    return render(request, 'simpleuser/registerToClass.html', context)
+
 
 def showMyClasses(request):
     return render(request, 'simpleuser/showMyClasses.html')
