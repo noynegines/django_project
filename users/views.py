@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm,registerToClassForm , adminMatnasForm , guideClassRegistersForm , adminDeleteClassForm
+from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm,registerToClassForm , adminMatnasForm  , adminDeleteClassForm , adminEditClassForm #guideClassRegistersForm
 from users.models import UserProfile , RegisterChild
 import json
 from django import forms
@@ -79,9 +79,22 @@ def DeleteTeacher(request):
                 instance = UserProfile.objects.get(t_id = deleteProfileForm.given_id).user
                 instance.delete()
 
-            else:
-                messages.success(request, f' id doesnt exist !!!!!!!')   
+                with open('users/classes.json', encoding="utf8") as db:
+                    Ttable = json.load(db)    
             
+                for item in Ttable:
+
+                    if(item["guide"] == deleteProfileForm.given_id):
+                        print(item["guide"]," ")
+                        print(deleteProfileForm.given_id)
+                        item["guide"] = " "
+                    
+
+            else:
+                messages.success(request, f' id doesnt exist !!!!!!!') 
+
+            with open('users/classes.json', 'w' , encoding="utf8") as newF:
+                json.dump(Ttable , newF , indent = 1)    
             return render(request,'Admin1/homeAdmin.html')
 
 
@@ -184,7 +197,6 @@ def AddActivitiesGroup(request):
             newl["max-age"]=maxAge
             newl["guide"]=teacherID
             newl["idC"] = i
-            #print(newl)
             Ttable.append(newl)
             with open('users/classes.json', 'w' , encoding="utf8") as newF:
                 json.dump(Ttable , newF , indent = 1)
@@ -425,6 +437,7 @@ def GuideShowRegistersByClass(request):
 
     return render(request, 'guide/guideClassRegistersForm.html', context)
 
+
 def Admin_Delete_Class(request):
     if request.method == 'POST':
         AdminDeleteClassForm = adminDeleteClassForm(request.POST)
@@ -450,6 +463,37 @@ def Admin_Delete_Class(request):
         
     context = {'AdminDeleteClassForm': AdminDeleteClassForm}
     return render(request, 'Admin1/DeleteClass.html', context)
+
+
+
+def Admin_Edit_Class(request):
+    if request.method == 'POST':
+        AdminEditClassForm = adminEditClassForm(request.POST)
+        if AdminEditClassForm.is_valid():
+            GuideId = AdminEditClassForm.cleaned_data.get('Guide')
+            ClassId = AdminEditClassForm.cleaned_data.get('Class')
+         
+            with open('users/classes.json', encoding="utf8") as db:
+                Ttable = json.load(db)    
+            
+            for item in Ttable:
+    
+                if item["idC"] == int(ClassId):
+                    
+                    item["guide"] = GuideId
+                    with open('users/classes.json', 'w' , encoding="utf8") as newF:
+                        json.dump(Ttable , newF , indent = 1)
+                    break
+                    
+        messages.success(request, f'edited successfully !')  
+        return render(request, 'Admin1/homeAdmin.html')           
+
+            
+    else:
+        AdminEditClassForm = adminEditClassForm()
+        
+    context = {'AdminEditClassForm': AdminEditClassForm}
+    return render(request, 'Admin1/editActivityG.html', context)
 
 
 

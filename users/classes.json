@@ -6797,5 +6797,31 @@
   "audience": " ",
   "guide": "123456789",
   "idC": 523
+ },
+ {
+  "location": "\u05d0\u05e9\u05db\u05d5\u05dc \u05e4\u05d9\u05e1",
+  "phone": "08-6434775",
+  "neighborhood": "\u05e9\u05db\u05d5\u05e0\u05d4 \u05d8'",
+  "category": " ",
+  "subcategory": " ",
+  "class-name": "\u05d7\u05d3\u05e91",
+  "min-age": "4",
+  "max-age": "9",
+  "audience": " ",
+  "guide": "123456789",
+  "idC": 524
+ },
+ {
+  "location": "\u05d0\u05e9\u05db\u05d5\u05dc \u05e4\u05d9\u05e1",
+  "phone": "08-6434775",
+  "neighborhood": "\u05e9\u05db\u05d5\u05e0\u05d4 \u05d8'",
+  "category": " ",
+  "subcategory": " ",
+  "class-name": "\u05d7\u05d3\u05e92",
+  "min-age": "8",
+  "max-age": "8",
+  "audience": " ",
+  "guide": " ",
+  "idC": 525
  }
 ]

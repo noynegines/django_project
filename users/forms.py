@@ -161,18 +161,46 @@ class adminDeleteClassForm(forms.ModelForm):
             choices=CHOICES)
 
 
+class adminEditClassForm(forms.ModelForm):
+
+
+    class Meta:
+        model = User
+        fields = []
+    def __init__(self, *args, **kwargs):
+        super(adminEditClassForm, self).__init__(*args, **kwargs)
+        with open('users/classes.json', encoding="utf8") as db:
+            Ttable = json.load(db)
+        CHOICES = ()
+        for x in Ttable:
+            CHOICES = CHOICES + (
+            (x["idC"], x["location"] + " " + x["neighborhood"] + " " + x["class-name"] + " " + x["min-age"] + "-" + x["max-age"]),)
+
+        self.fields['Class'] = forms.ChoiceField(choices=CHOICES)
+
+        CHOICES2 = ()
+        y = UserProfile.objects.all()
+        
+        for x in y:
+            CHOICES2 = CHOICES2 + (
+            (str(x.t_id) , str(x.user) + " " + str(x.t_id) ),)
+
+        self.fields['Guide'] = forms.ChoiceField(choices=CHOICES2)
+
+
+
 
 
 
 # this one isnt used !!!!
-
+'''
 class guideClassRegistersForm(forms.ModelForm):
     
     CHOICES = ()
     with open('users/classes.json' , encoding="utf8" ) as db:
         MyClass=json.load(db)
     
-    '''
+    
     CHOICES = ()
     idG = get_initial_for_field("idG") 
     for row in MyClass:
@@ -190,7 +218,7 @@ class guideClassRegistersForm(forms.ModelForm):
             #x.append(inX)
             #inX=[]
     select = forms.CharField(widget=forms.Select(choices=CHOICES))
-    '''
+   
 
     class Meta:
         model = User
@@ -198,3 +226,4 @@ class guideClassRegistersForm(forms.ModelForm):
     
 
 
+'''

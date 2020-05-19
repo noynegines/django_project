@@ -35,6 +35,7 @@ urlpatterns = [
     path('childrenList/', user_views.childrenList, name='childrenList'),
     path('editDetails/', user_views.editDetails, name='editDetails'),
     path('ShowMyClass/', user_views.ShowMyClass, name='ShowMyClass'),
+    path('Admin_Edit_Class/', user_views.Admin_Edit_Class, name='Admin_Edit_Class'),
     path('Admin_Delete_Class/', user_views.Admin_Delete_Class, name='Admin_Delete_Class'),
     path('GuideShowRegistersByClass/', user_views.GuideShowRegistersByClass, name='GuideShowRegistersByClass'),
     path('AdminShowRegisters/',user_views.adminShowRegisters,name ='AdminShowRegisters'),
