@@ -877,8 +877,8 @@
   "category": "\u05d4\u05e2\u05e9\u05e8\u05d4",
   "subcategory": "\u05ea\u05d9\u05e0\u05d5\u05e7\u05d5\u05ea",
   "class-name": "\u05e2\u05d9\u05e1\u05d5\u05d9 \u05ea\u05d9\u05e0\u05d5\u05e7\u05d5\u05ea \u05d5\u05e8\u05e4\u05dc\u05e7\u05e1\u05d5\u05dc\u05d5\u05d2\u05d9\u05d4",
-  "min-age": "",
-  "max-age": "",
+  "min-age": "0",
+  "max-age": "99",
   "audience": "\u05ea\u05d9\u05e0\u05d5\u05e7\u05d5\u05ea",
   "guide": " ",
   "idC": 68
@@ -1553,8 +1553,8 @@
   "category": "\u05d4\u05e2\u05e9\u05e8\u05d4",
   "subcategory": "\u05ea\u05d9\u05e0\u05d5\u05e7\u05d5\u05ea",
   "class-name": "\u05d1\u05d9\u05d9\u05d1\u05d9\u05dc\u05d0\u05d8\u05d9\u05e1",
-  "min-age": "",
-  "max-age": "",
+  "min-age": "0",
+  "max-age": "99",
   "audience": "\u05ea\u05d9\u05e0\u05d5\u05e7\u05d5\u05ea",
   "guide": " ",
   "idC": 120
@@ -1566,8 +1566,8 @@
   "category": "\u05d4\u05e2\u05e9\u05e8\u05d4",
   "subcategory": "\u05ea\u05d9\u05e0\u05d5\u05e7\u05d5\u05ea",
   "class-name": "\u05d1\u05d9\u05d9\u05d1\u05d9\u05dc\u05d0\u05d8\u05d9\u05e1",
-  "min-age": "",
-  "max-age": "",
+  "min-age": "0",
+  "max-age": "99",
   "audience": "\u05ea\u05d9\u05e0\u05d5\u05e7\u05d5\u05ea",
   "guide": " ",
   "idC": 121
@@ -2944,8 +2944,8 @@
   "category": "\u05e1\u05e4\u05d5\u05e8\u05d8",
   "subcategory": "\u05e2\u05d9\u05e6\u05d5\u05d1 \u05d4\u05d2\u05d5\u05e3",
   "class-name": "\u05d0\u05e7\u05e8\u05d5\u05d1\u05d8\u05d9\u05e7\u05d4 \u05de\u05ea\u05e7\u05d3\u05de\u05d9\u05dd",
-  "min-age": "",
-  "max-age": "",
+  "min-age": "0",
+  "max-age": "99",
   "audience": "\u05d9\u05dc\u05d3\u05d9\u05dd",
   "guide": " ",
   "idC": 227
@@ -6797,19 +6797,6 @@
   "audience": " ",
   "guide": "123456789",
   "idC": 523
- },
- {
-  "location": "\u05d0\u05e9\u05db\u05d5\u05dc \u05e4\u05d9\u05e1",
-  "phone": "08-6434775",
-  "neighborhood": "\u05e9\u05db\u05d5\u05e0\u05d4 \u05d8'",
-  "category": " ",
-  "subcategory": " ",
-  "class-name": "\u05d7\u05d3\u05e91",
-  "min-age": "4",
-  "max-age": "9",
-  "audience": " ",
-  "guide": "123456789",
-  "idC": 524
  },
  {
   "location": "\u05d0\u05e9\u05db\u05d5\u05dc \u05e4\u05d9\u05e1",

@@ -193,37 +193,24 @@ class adminEditClassForm(forms.ModelForm):
 
 
 # this one isnt used !!!!
-'''
+
 class guideClassRegistersForm(forms.ModelForm):
     
-    CHOICES = ()
-    with open('users/classes.json' , encoding="utf8" ) as db:
-        MyClass=json.load(db)
-    
-    
-    CHOICES = ()
-    idG = get_initial_for_field("idG") 
-    for row in MyClass:
-        if idG == int(row["guide"]):
-            s1 =""
-            s1 = s1 +" "+ row["location"]
-            s1 = s1 +" "+ row["phone"]
-            s1 = s1 +" "+ row["neighborhood"]
-            s1 = s1 +" "+ row["class-name"]
-            s1 = s1 +" "+ row["min-age"]
-            s1 = s1 +" "+ row["max-age"]
-            s1 = s1 +" "+ row["guide"]
-            tup = (s1 , idG )
-            CHOICES = (tup , ) + CHOICES
-            #x.append(inX)
-            #inX=[]
-    select = forms.CharField(widget=forms.Select(choices=CHOICES))
-   
-
     class Meta:
         model = User
         fields = []  # max delete this selects
     
+    def __init__(self, idG,*args, **kwargs):
+        super(guideClassRegistersForm, self).__init__(*args, **kwargs)
+        CHOICES = ()
+        
+        with open('users/classes.json', encoding="utf8") as db:
+            Ttable = json.load(db)
+        for x in Ttable:
+            if( idG.replace(' ','') == x["guide"].replace(' ','')):
+                CHOICES = CHOICES + (
+                (x["idC"] , x["location"] + " " + x["neighborhood"] + " " + x["class-name"] + " " + x["min-age"] + "-" + x["max-age"]),)
 
 
-'''
+        self.fields['select'] = forms.ChoiceField(choices=CHOICES)
+        

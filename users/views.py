@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm,registerToClassForm , adminMatnasForm  , adminDeleteClassForm , adminEditClassForm #guideClassRegistersForm
+from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm,registerToClassForm , adminMatnasForm  , adminDeleteClassForm , adminEditClassForm , guideClassRegistersForm
 from users.models import UserProfile , RegisterChild
 import json
 from django import forms
 #import requests
-
-    #print(dataB)
 
 def register(request):
     if request.method == 'POST':
@@ -62,50 +60,37 @@ def profile(request):
 def TeacherTable(request):
     Ttable=UserProfile.objects.all()
     context = {'Ttable': Ttable}
-    return render(request,'Admin1/TeacherTable.html',context)    
-
+    return render(request,'Admin1/TeacherTable.html',context)
 
 
 def DeleteTeacher(request):
-
     if request.method == 'POST':
         deleteProfileForm = DeleteProfileForm(request.POST)
-        Ttable = UserProfile.objects.all()
-        if deleteProfileForm.is_valid() :
+        context = {'deleteProfileForm': deleteProfileForm}
+        if deleteProfileForm.is_valid():
             deleteProfileForm.given_id = deleteProfileForm.cleaned_data.get('given_id')
             all_tids = UserProfile.objects.values_list('t_id', flat=True).distinct()
-            if(deleteProfileForm.given_id in all_tids):
-                messages.success(request, f' succesfully deleted the guide !')
-                instance = UserProfile.objects.get(t_id = deleteProfileForm.given_id).user
-                instance.delete()
-
+            if (deleteProfileForm.given_id in all_tids):
                 with open('users/classes.json', encoding="utf8") as db:
-                    Ttable = json.load(db)    
-            
+                    Ttable = json.load(db)
                 for item in Ttable:
-
-                    if(item["guide"] == deleteProfileForm.given_id):
-                        print(item["guide"]," ")
-                        print(deleteProfileForm.given_id)
+                    if (item["guide"] == deleteProfileForm.given_id):
                         item["guide"] = " "
-                    
+                with open('users/classes.json', 'w', encoding="utf8") as newF:
+                    json.dump(Ttable, newF, indent=1)
+                instance = UserProfile.objects.get(t_id=deleteProfileForm.given_id).user
+                instance.delete()
+                messages.success(request, f' succesfully deleted the guide !')
+                return render(request, 'Admin1/homeAdmin.html')
 
             else:
-                messages.success(request, f' id doesnt exist !!!!!!!') 
-
-            with open('users/classes.json', 'w' , encoding="utf8") as newF:
-                json.dump(Ttable , newF , indent = 1)    
-            return render(request,'Admin1/homeAdmin.html')
-
-
+                messages.warning(request, f' id doesnt exist !!!!!!!')
+                return render(request, 'Admin1/deleteTeacher.html', context)
     else:
         deleteProfileForm = DeleteProfileForm()
-        Ttable=UserProfile.objects.all()
-    
-
-    context = { 'deleteProfileForm' : deleteProfileForm ,'Ttable': Ttable}
-    return render(request,'Admin1/deleteTeacher.html',context)    
-
+        Ttable = UserProfile.objects.all()
+        context = {'deleteProfileForm': deleteProfileForm}
+    return render(request, 'Admin1/deleteTeacher.html', context)
 
 
 
@@ -115,18 +100,11 @@ def GroupActivitiesTable(request):
     x = []
     inX = []
     with open('users/classes.json' , encoding="utf8" ) as db:
-        Ttable=json.load(db)  
-
-    #for d in Ttable:
-    #    d["guide"]=''
-
-    #with open('users/Newclasses.json' , encoding="utf8" ) as ty :
-    #    Ttable=json.load(db)    
-
-
+        Ttable=json.load(db)
     if request.method == 'POST':
         ShowGroupActiviesForm = showGroupActiviesForm(request.POST)
         if ShowGroupActiviesForm.is_valid() :
+
             y = ShowGroupActiviesForm.cleaned_data.get('select') 
             ShowGroupActiviesForm.age = ShowGroupActiviesForm.cleaned_data.get('age')
             ShowGroupActiviesForm.neighborhood = ShowGroupActiviesForm.cleaned_data.get('neighborhood')
@@ -145,14 +123,12 @@ def GroupActivitiesTable(request):
         else:
             messages.success(request, f' not valid form !') 
 
-        context = { 'ShowGroupActiviesForm' : ShowGroupActiviesForm , 'Ttable': Ttable , 'x' : x }      
-        #print(x )
+        context = { 'ShowGroupActiviesForm' : ShowGroupActiviesForm , 'Ttable': Ttable , 'x' : x }
         return render(request,'simpleuser/GroupActivitiesTable.html',context)
 
 
     else:
         ShowGroupActiviesForm = showGroupActiviesForm()
-        #AddActivitiesGroup
     
     context = { 'ShowGroupActiviesForm' : ShowGroupActiviesForm , 'Ttable': Ttable , 'x' : x }
     return render(request,'simpleuser/GroupActivitiesTable.html',context )
@@ -255,11 +231,6 @@ def adminShowRegisters(request):
     return render(request, 'Admin1/showRegisters.html', context)
 
 def registerToClass(request):
-    #regTOclass = registerToClassForm()
-    #context = {'registertoclass': regTOclass}
-    #return render(request, 'simpleuser/registerToClass.html', context)
-
-
     if request.method == 'POST':
         RegisterToClassForm = registerToClassForm(request.POST)
 
@@ -291,7 +262,9 @@ def registerToClass(request):
                     if row["idC"] == int(IDclass) :
                         minA =row["min-age"]
                         maxA = row["max-age"]
-                        if int(Age_C) > int(maxA) or int(Age_C) < int(minA) :
+                        print(type( maxA))
+                        print(minA,minA)
+                        if  int(Age_C) > int(maxA) or int(Age_C) < int(minA) :
                             messages.warning(request, f'your age is not in the range')
                             return render(request, 'simpleuser/registerToClass.html', context)
 
@@ -336,11 +309,6 @@ def showMyClasses(request): #לקוח
     context = {'x': x}
     return render(request, 'simpleuser/showMyClasses.html',context)
 
-def TeacherDetail(request):
-    return render(request, 'simpleuser/TeacherDetail.html')
-
-def childrenList(request):
-    return render(request, 'guide/childrenList.html')
 
 def editDetails(request):
     return render(request, 'guide/editDetails.html')
@@ -405,41 +373,9 @@ def adminShowRegistersByMatnas(request):
 
 
 
-
-
-def GuideShowRegistersByClass(request):
-    
-    x = []
-    inX = []
-    gid = request.user.userprofile.t_id
-    
-    with open('users/classes.json', encoding="utf8") as db:
-        Ttable = json.load(db)
-
-    value = RegisterChild.objects.all()
-    
-    for item in value:
-        RegisterClassId = item.idClass
-        for row in Ttable:
-            if (int(row["idC"]) == int(RegisterClassId)):
-                if (row["guide"].replace(' ', '') == gid.replace(' ', '')):
-                    inX.append(item.ID_P)
-                    inX.append(item.ID_C)
-                    inX.append(item.FName_C)
-                    inX.append(item.LName_C)
-                    inX.append(item.Age_C)
-                    inX.append(item.Phone_P)
-                    inX.append(item.idClass)
-                    x.append(inX)
-                    inX = []
-
-    context = {'x': x}
-
-    return render(request, 'guide/guideClassRegistersForm.html', context)
-
-
 def Admin_Delete_Class(request):
     if request.method == 'POST':
+        print("spir")
         AdminDeleteClassForm = adminDeleteClassForm(request.POST)
         if AdminDeleteClassForm.is_valid():
             IDclass = AdminDeleteClassForm.cleaned_data.get('select')
@@ -455,12 +391,15 @@ def Admin_Delete_Class(request):
                     messages.success(request, f'deleted successfully !')
                     break
 
-        return render(request, 'Admin1/homeAdmin.html')           
-
-
+            value = RegisterChild.objects.all()
+            for child in value:
+                if int(child.idClass) == int(IDclass):
+                    child.delete()
+        return render(request, 'Admin1/homeAdmin.html')
     else:
+        print("adva")
         AdminDeleteClassForm = adminDeleteClassForm()
-        
+        print("zzzzzzzzzzzz")
     context = {'AdminDeleteClassForm': AdminDeleteClassForm}
     return render(request, 'Admin1/DeleteClass.html', context)
 
@@ -497,40 +436,33 @@ def Admin_Edit_Class(request):
 
 
 
-'''
+
 def GuideShowRegistersByClass(request):
+    x = []
+    inX = []
     if request.method == 'POST':
-        GuideClassRegistersForm = guideClassRegistersForm(request.POST)
-        x = []
-        inX = []
-
-        with open('users/classes.json', encoding="utf8") as db:
-            Ttable = json.load(db)
-
+        GuideClassRegistersForm = guideClassRegistersForm(request.user.userprofile.t_id,request.POST)
         value = RegisterChild.objects.all()
         if GuideClassRegistersForm.is_valid():
-            matnas = GuideClassRegistersForm.cleaned_data.get('select')
+            classId = GuideClassRegistersForm.cleaned_data.get('select')
+
             for item in value:
-                RegisterClassId = item.idClass
-                for row in Ttable:
-                    if (int(row["idC"]) == int(RegisterClassId)):
-                        if (row["location"].replace(' ', '') == matnas.replace(' ', '')):
-                            inX.append(item.ID_P)
-                            inX.append(item.ID_C)
-                            inX.append(item.FName_C)
-                            inX.append(item.LName_C)
-                            inX.append(item.Age_C)
-                            inX.append(item.Phone_P)
-                            inX.append(item.idClass)
-                            x.append(inX)
-                            inX = []
+                RegisterClassId = item.idClass#.replace(' ', '')
 
-            context = {'x': x, 'GuideClassRegistersForm': GuideClassRegistersForm}
-
+                if (int(classId) == int(RegisterClassId)):
+                    inX.append(item.ID_P)
+                    inX.append(item.ID_C)
+                    inX.append(item.FName_C)
+                    inX.append(item.LName_C)
+                    inX.append(item.Age_C)
+                    inX.append(item.Phone_P)
+                    inX.append(item.idClass)
+                    x.append(inX)
+                    inX = []
+        context = {'x': x , 'GuideClassRegistersForm': GuideClassRegistersForm}
+        return render(request, 'guide/guideClassRegisters.html', context)
     else:
-        initial = {'idG':request.user.userprofile.t_id}
-        GuideClassRegistersForm = guideClassRegistersForm(initial=initial)
-        context = {'GuideClassRegistersForm': GuideClassRegistersForm}
-
-    return render(request, 'guide/guideClassRegistersForm.html', context)
-'''
+        GuideClassRegistersForm = guideClassRegistersForm(request.user.userprofile.t_id)
+        context = {'x':x,'GuideClassRegistersForm': GuideClassRegistersForm}
+    
+    return render(request, 'guide/guideClassRegisters.html', context)
