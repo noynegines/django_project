@@ -6797,44 +6797,5 @@
   "audience": " ",
   "guide": "123456789",
   "idC": 523
- },
- {
-  "location": "\u05d0\u05e9\u05db\u05d5\u05dc \u05e4\u05d9\u05e1",
-  "phone": "08-6434775",
-  "neighborhood": "\u05e9\u05db\u05d5\u05e0\u05d4 \u05d8'",
-  "category": " ",
-  "subcategory": " ",
-  "class-name": "\u05e2\u05d5\u05d1\u05d3\u05d3\u05d3",
-  "min-age": "10",
-  "max-age": "12",
-  "audience": " ",
-  "guide": "123456789",
-  "idC": 524
- },
- {
-  "location": "\u05d0\u05e9\u05db\u05d5\u05dc \u05e4\u05d9\u05e1",
-  "phone": "08-6434775",
-  "neighborhood": "\u05e9\u05db\u05d5\u05e0\u05d4 \u05d8'",
-  "category": " ",
-  "subcategory": " ",
-  "class-name": "\u05d7\u05d3\u05e94",
-  "min-age": "8",
-  "max-age": "9",
-  "audience": " ",
-  "guide": "123456789",
-  "idC": 525
- },
- {
-  "location": "\u05de\u05ea\u05e0\"\u05e1 \u05e8\u05de\u05d5\u05ea \u05e1\u05e4\u05d5\u05e8\u05d8\u05d9\u05d1",
-  "phone": "08-6414444",
-  "neighborhood": "\u05e9\u05db\u05d5\u05e0\u05ea \u05e8\u05de\u05d5\u05ea",
-  "category": " ",
-  "subcategory": " ",
-  "class-name": "\u05d7\u05d3\u05e95",
-  "min-age": "7",
-  "max-age": "10",
-  "audience": " ",
-  "guide": "123456789",
-  "idC": 526
  }
 ]

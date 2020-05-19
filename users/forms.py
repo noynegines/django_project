@@ -92,6 +92,8 @@ class addGroupActiviesForm(forms.ModelForm):
 
 
 class adminMatnasForm(forms.ModelForm):
+    
+
     CHOICES = (
         ("אשכול פיס ", "אשכול פיס "),
         (" מתנ\"ס רמות ספורטיב ", " מתנ\"ס רמות ספורטיב "),
@@ -114,6 +116,7 @@ class adminMatnasForm(forms.ModelForm):
     class Meta:
         model = User
         fields = []  # max delete this selects
+
 class registerToClassForm(forms.ModelForm):
 
     ID_C = forms.CharField(max_length=9, min_length=9,widget=forms.TextInput(attrs={'type':'number','min':'0'}), label='ID child')
@@ -136,3 +139,62 @@ class registerToClassForm(forms.ModelForm):
 
         self.fields['select'] = forms.ChoiceField(
             choices=CHOICES)
+
+
+
+class adminDeleteClassForm(forms.ModelForm):
+
+    
+    class Meta:
+        model = User
+        fields = []
+    def __init__(self, *args, **kwargs):
+        super(adminDeleteClassForm, self).__init__(*args, **kwargs)
+        with open('users/classes.json', encoding="utf8") as db:
+            Ttable = json.load(db)
+        CHOICES = ()
+        for x in Ttable:
+            CHOICES = CHOICES + (
+            (x["idC"], x["location"] + " " + x["neighborhood"] + " " + x["class-name"] + " " + x["min-age"] + "-" + x["max-age"]),)
+
+        self.fields['select'] = forms.ChoiceField(
+            choices=CHOICES)
+
+
+
+
+
+# this one isnt used !!!!
+
+class guideClassRegistersForm(forms.ModelForm):
+    
+    CHOICES = ()
+    with open('users/classes.json' , encoding="utf8" ) as db:
+        MyClass=json.load(db)
+    
+    '''
+    CHOICES = ()
+    idG = get_initial_for_field("idG") 
+    for row in MyClass:
+        if idG == int(row["guide"]):
+            s1 =""
+            s1 = s1 +" "+ row["location"]
+            s1 = s1 +" "+ row["phone"]
+            s1 = s1 +" "+ row["neighborhood"]
+            s1 = s1 +" "+ row["class-name"]
+            s1 = s1 +" "+ row["min-age"]
+            s1 = s1 +" "+ row["max-age"]
+            s1 = s1 +" "+ row["guide"]
+            tup = (s1 , idG )
+            CHOICES = (tup , ) + CHOICES
+            #x.append(inX)
+            #inX=[]
+    select = forms.CharField(widget=forms.Select(choices=CHOICES))
+    '''
+
+    class Meta:
+        model = User
+        fields = []  # max delete this selects
+    
+
+
