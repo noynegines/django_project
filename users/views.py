@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm,registerToClassForm
+from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm,registerToClassForm , adminMatnasForm
 from users.models import UserProfile , RegisterChild
 import json
+from django import forms
 #import requests
 
     #print(dataB)
@@ -166,12 +167,15 @@ def AddActivitiesGroup(request):
             groupActivityList = []
             with open('users/classes.json', encoding="utf8") as db:
                 Ttable = json.load(db)
+            i=0
             for item in Ttable:
+                if i<item["idC"]:
+                    i=item["idC"]
                 if ( item["class-name"].replace(' ', '')== given_groupActivity.replace(' ', '') and item["neighborhood"].replace(' ', '') == y[2].replace(' ', '') and item["phone"].replace(' ', '') == y[1].replace(' ', '') and item["location"].replace(' ', '') == y[0].replace(' ', '') and item["min-age"].replace(' ', '') == minAge and item["max-age"].replace(' ', '') == maxAge ):
                     messages.warning(request, f' group activity already exist  !')
                     return render(request, 'Admin1/AddActivitiesGroup.html', context)
-
-            newl={"location": " ", "phone": " ", "neighborhood": " ", "category": " ", "subcategory": " ", "class-name": " ", "min-age": "", "max-age": "", "audience": " ","guide":" "}
+            i=i+1
+            newl={"location": " ", "phone": " ", "neighborhood": " ", "category": " ", "subcategory": " ", "class-name": " ", "min-age": "", "max-age": "", "audience": " ","guide":" ","idC":0}
             newl["location"]=y[0]
             newl["phone"]=y[1]
             newl["neighborhood"]=y[2]
@@ -179,6 +183,7 @@ def AddActivitiesGroup(request):
             newl["min-age"]=minAge
             newl["max-age"]=maxAge
             newl["guide"]=teacherID
+            newl["idC"] = i
             #print(newl)
             Ttable.append(newl)
             with open('users/classes.json', 'w' , encoding="utf8") as newF:
@@ -241,7 +246,8 @@ def registerToClass(request):
     #regTOclass = registerToClassForm()
     #context = {'registertoclass': regTOclass}
     #return render(request, 'simpleuser/registerToClass.html', context)
-    
+
+
     if request.method == 'POST':
         RegisterToClassForm = registerToClassForm(request.POST)
 
@@ -347,3 +353,39 @@ def ShowMyClass(request): #מדריך
 
     context = { 'MyClass': MyClass , 'x' : x }
     return render(request,'guide/ShowMyClass.html',context )
+
+
+def adminShowRegistersByMatnas(request):
+    if request.method == 'POST':
+        AdminMatnasForm = adminMatnasForm(request.POST)
+        x = []
+        inX = []
+
+        with open('users/classes.json', encoding="utf8") as db:
+            Ttable = json.load(db)
+
+        value = RegisterChild.objects.all()
+        if AdminMatnasForm.is_valid():
+            matnas = AdminMatnasForm.cleaned_data.get('select')
+            for item in value:
+                RegisterClassId = item.idClass
+                for row in Ttable:
+                    if (int(row["idC"]) == int(RegisterClassId)):
+                        if (row["location"].replace(' ', '') == matnas.replace(' ', '')):
+                            inX.append(item.ID_P)
+                            inX.append(item.ID_C)
+                            inX.append(item.FName_C)
+                            inX.append(item.LName_C)
+                            inX.append(item.Age_C)
+                            inX.append(item.Phone_P)
+                            inX.append(item.idClass)
+                            x.append(inX)
+                            inX = []
+
+            context = {'x': x, 'AdminMatnasForm': AdminMatnasForm}
+
+    else:
+        AdminMatnasForm = adminMatnasForm()
+        context = {'AdminMatnasForm': AdminMatnasForm}
+
+    return render(request, 'Admin1/showRegistersByMatnas.html', context)

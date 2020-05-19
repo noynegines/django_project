@@ -26,6 +26,8 @@ class UserProfileForm(forms.ModelForm):
 
 
 
+
+
 class DeleteProfileForm(forms.ModelForm):
     
     given_id = forms.CharField( max_length=9, min_length=9,widget=forms.TextInput(attrs={'type':'number','min':'0'}),label='the id of the teacher you want to delete : ')
@@ -89,6 +91,29 @@ class addGroupActiviesForm(forms.ModelForm):
         fields = ['ageMax','ageMin' ,'nameClas' , 'given_id']
 
 
+class adminMatnasForm(forms.ModelForm):
+    CHOICES = (
+        ("אשכול פיס ", "אשכול פיס "),
+        (" מתנ\"ס רמות ספורטיב ", " מתנ\"ס רמות ספורטיב "),
+        ("אשכול רמות ", "אשכול רמות "),
+        ("הרוח היהודית  ", "הרוח היהודית  "),
+        ("מרגליות ", "מרגליות "),
+        ("פאני קפלן  ", "פאני קפלן  "),
+        ("נאות לון ", "נאות לון "),
+        ("נווה נוי ", "נווה נוי "),
+        ("רמב\"ם ", "רמב\"ם "),
+        ("אולם ספורט נווה נוי/מענית  ", "אולם ספורט נווה נוי/מענית  "),
+        ("נווה זאב ", "נווה זאב "),
+        (" קתדרה ", " קתדרה "),
+        ("דניס הישרדות ", "דניס הישרדות "),
+        ("מועדון השחמט העירוני ", "מועדון השחמט העירוני "),
+        ("מתנ\"ס יא ", "מתנ\"ס יא "),
+        ("רגר   ", "רגר   "),)
+    select = forms.CharField(widget=forms.Select(choices=CHOICES))
+
+    class Meta:
+        model = User
+        fields = []  # max delete this selects
 class registerToClassForm(forms.ModelForm):
 
     ID_C = forms.CharField(max_length=9, min_length=9,widget=forms.TextInput(attrs={'type':'number','min':'0'}), label='ID child')
@@ -97,17 +122,17 @@ class registerToClassForm(forms.ModelForm):
     Age_C = forms.CharField(max_length=2, min_length=1, widget=forms.TextInput(attrs={'type': 'number', 'min': '0'}),label='Age')
     Phone_P = forms.CharField(max_length=10, min_length=10,widget=forms.TextInput(attrs={'type':'number','min':'0'}), label='Phone')
 
-    with open('users/classes.json', encoding="utf8") as db:
-        Ttable = json.load(db)
-    CHOICES = ()
-    for x in Ttable:
-        CHOICES = CHOICES + (
-        (x["idC"], x["location"] + " " + x["neighborhood"] + " " + x["class-name"] + " " + x["min-age"] + "-" + x["max-age"]),)
-
-
-    select = forms.CharField(widget=forms.Select(choices=CHOICES))
-
     class Meta:
         model = User
         fields = ['ID_C','FName_C' ,'LName_C' , 'Age_C','Phone_P']
+    def __init__(self, *args, **kwargs):
+        super(registerToClassForm, self).__init__(*args, **kwargs)
+        with open('users/classes.json', encoding="utf8") as db:
+            Ttable = json.load(db)
+        CHOICES = ()
+        for x in Ttable:
+            CHOICES = CHOICES + (
+            (x["idC"], x["location"] + " " + x["neighborhood"] + " " + x["class-name"] + " " + x["min-age"] + "-" + x["max-age"]),)
 
+        self.fields['select'] = forms.ChoiceField(
+            choices=CHOICES)

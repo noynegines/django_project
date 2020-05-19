@@ -29,7 +29,6 @@ urlpatterns = [
     path('groupActivityTable/',user_views.GroupActivitiesTable,name ='groupActivityTable'),
     path('AdminGroupActivityTable/',user_views.AdminGroupActivitiesTable,name ='AdminGroupActivityTable'),
     path('AddActivitiesGroup/',user_views.AddActivitiesGroup,name ='AddActivitiesGroup'),
-    path('', include('homepage.urls')),
     path('registerToClass/',user_views.registerToClass, name='registerToClass'),
     path('showMyClasses/',user_views.showMyClasses, name='showMyClasses'),
     path('TeacherDetail/',user_views.TeacherDetail, name='TeacherDetail'),
@@ -37,5 +36,8 @@ urlpatterns = [
     path('editDetails/', user_views.editDetails, name='editDetails'),
     path('ShowMyClass/', user_views.ShowMyClass, name='ShowMyClass'),
     path('AdminShowRegisters/',user_views.adminShowRegisters,name ='AdminShowRegisters'),
+    path('showRegistersByMatnas/',user_views.adminShowRegistersByMatnas,name ='showRegistersByMatnas'),
+    path('', include('homepage.urls')),
+
 
 ]
