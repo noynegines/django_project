@@ -40,6 +40,7 @@ urlpatterns = [
     path('GuideShowRegistersByClass/', user_views.GuideShowRegistersByClass, name='GuideShowRegistersByClass'),
     path('AdminShowRegisters/',user_views.adminShowRegisters,name ='AdminShowRegisters'),
     path('showRegistersByMatnas/',user_views.adminShowRegistersByMatnas,name ='showRegistersByMatnas'),
+    path('DetailGuideS/',user_views.simpleuserDetailGuideS,name ='DetailGuideS'),
     path('', include('homepage.urls')),
     path('<int:pk>/guidUpdateView',user_views.guidUpdateView.as_view(),name='GuidUpdateView'),
 

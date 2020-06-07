@@ -307,6 +307,11 @@ def showMyClasses(request): #לקוח
                     inX.append(item.Phone_P)
                     inX.append(t["location"])
                     inX.append(t["class-name"])
+                    nameG="";
+                    if t["guide"]!=" ":
+                        instance = UserProfile.objects.get(t_id=t["guide"])
+                        nameG=instance.user.first_name+ " "+instance.user.last_name
+                    inX.append(nameG)
                     x.append(inX)
                     inX = []
 
@@ -470,6 +475,32 @@ def GuideShowRegistersByClass(request):
         context = {'x':x,'GuideClassRegistersForm': GuideClassRegistersForm}
     
     return render(request, 'guide/guideClassRegisters.html', context)
+def simpleuserDetailGuideS(request):
+    x = []
+    inX = []
+    tid = request.user.id
+
+    value = RegisterChild.objects.all()
+
+    with open('users/classes.json', encoding="utf8") as db:
+        MyClass = json.load(db)
+
+    for item in value:
+        if int(tid) == int(item.ID_P):
+            for t in MyClass:
+                if int(t["idC"]) == int(item.idClass):
+                    nameG = "";
+                    DidelG=""
+                    if t["guide"] != " ":
+                        instance = UserProfile.objects.get(t_id=t["guide"])
+                        nameG = instance.user.first_name + " " + instance.user.last_name
+                        DidelG=instance.aboutMe
+                        if nameG not in  inX:
+                            inX.append(nameG)
+                            inX.append(DidelG)
+
+    context = {'inX': inX}
+    return render(request, 'simpleuser/simpDetailGuideS.html', context)
 
 class guidUpdateView(UpdateView):
     model = UserProfile
@@ -479,3 +510,5 @@ class guidUpdateView(UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+
