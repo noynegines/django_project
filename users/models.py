@@ -23,5 +23,8 @@ class RegisterChild(models.Model):
 	Phone_P = models.CharField(max_length=10)
 	idClass = models.CharField(max_length=10)
 
-
-
+class HoursReport(models.Model):
+	t_id = models.CharField(max_length=9)
+	start_hour=models.CharField(max_length=20)
+	finish_hour=models.CharField(max_length=20)
+	date=models.CharField(max_length=20)

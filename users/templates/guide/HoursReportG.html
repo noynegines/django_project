@@ -1,0 +1,70 @@
+{% extends "guide/baseGuide.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Hour</legend>
+                {{ hoursReportForm|crispy }}
+
+
+            <input class="form-control" id="guideDatePicker" type="date" name="guideDatePicker" placeholder="">
+             <html>
+                    <head>
+                    <style>
+                    table {
+                      font-family: arial, sans-serif;
+                      border-collapse: collapse;
+                      width: 100%;
+                    }
+
+                    td, th {
+                      border: 1px solid #dddddd;
+                      text-align: left;
+                      padding: 8px;
+                    }
+
+                    tr:nth-child(even) {
+                      background-color: #dddddd;
+                    }
+                    </style>
+                    </head>
+                    <body>
+
+                    <table>
+                      <tr>
+                        <th>date</th>
+                        <th>start_hour</th>
+                        <th>finish_hour</th>
+
+
+                      </tr>
+
+
+                    {% for T in table %}
+                    <tr>
+                    {% for r in T %}
+
+                    <td>{{r}}</td>
+
+                    {% endfor %}
+                    </tr>
+                    {% endfor %}
+
+                    </body>
+                    </html>
+
+
+            </fieldset>
+
+            <div class="form-group">
+               <button class="btn btn-outline-info" type="submit">add</button>
+            </div>
+
+        </form>
+        <div class="border-top pt-3">
+
+        </div>
+    </div>
+{% endblock content %}

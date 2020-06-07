@@ -213,4 +213,58 @@ class guideClassRegistersForm(forms.ModelForm):
 
 
         self.fields['select'] = forms.ChoiceField(choices=CHOICES)
-        
+
+
+class adminDeleteChildFromClassForm(forms.ModelForm):
+    ID_C = forms.CharField(max_length=9, min_length=9, widget=forms.TextInput(attrs={'type': 'number', 'min': '0'}),
+                           label='ID child')
+
+    class Meta:
+        model = User
+        fields = ['ID_C']
+
+    def __init__(self, *args, **kwargs):
+        super(adminDeleteChildFromClassForm, self).__init__(*args, **kwargs)
+        with open('users/classes.json', encoding="utf8") as db:
+            Ttable = json.load(db)
+        CHOICES = ()
+        for x in Ttable:
+            CHOICES = CHOICES + (
+                (x["idC"],
+                 x["location"] + " " + x["neighborhood"] + " " + x["class-name"] + " " + x["min-age"] + "-" + x[
+                     "max-age"]),)
+        self.fields['class'] = forms.ChoiceField(
+            choices=CHOICES)
+class HoursReportForm(forms.ModelForm):
+    CHOICES = (
+        ( "01:00","01:00"),
+        ("02:00", "02:00"),
+        ("03:00", "03:00"),
+        ("04:00", "04:00"),
+        ("05:00", "05:00"),
+        ("06:00", "06:00"),
+        ("07:00", "07:00"),
+        ("08:00", "08:00"),
+        ("09:00", "09:00"),
+        ("10:00", "10:00"),
+        ("11:00", "11:00"),
+        ("12:00", "12:00"),
+        ("13:00", "13:00"),
+        ("14:00", "14:00"),
+        ("15:00", "15:00"),
+        ("16:00", "16:00"),
+        ("17:00", "17:00"),
+        ("18:00", "18:00"),
+        ("19:00", "19:00"),
+        ("20:00", "20:00"),
+        ("21:00", "21:00"),
+        ("22:00", "22:00"),
+        ("23:00", "23:00"),
+    )
+    start_hour = forms.CharField(widget=forms.Select(choices=CHOICES))
+
+    finish_hour=forms.CharField(widget=forms.Select(choices=CHOICES))
+
+    class Meta:
+        model = User
+        fields = ['start_hour','finish_hour',]

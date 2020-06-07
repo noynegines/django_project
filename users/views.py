@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm,registerToClassForm , adminMatnasForm  , adminDeleteClassForm , adminEditClassForm , guideClassRegistersForm
-from users.models import UserProfile , RegisterChild
+from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm,registerToClassForm , adminMatnasForm  , adminDeleteClassForm , adminEditClassForm , guideClassRegistersForm,adminDeleteChildFromClassForm,HoursReportForm
+from users.models import UserProfile , RegisterChild,HoursReport
 import json
 from django.views.generic import (
     UpdateView
 
 )
+from datetime import datetime
 from django import forms
 #import requests
 
@@ -236,6 +237,7 @@ def adminShowRegisters(request):
 
 def registerToClass(request):
     if request.method == 'POST':
+        #HoursReportForm
         RegisterToClassForm = registerToClassForm(request.POST)
 
         if RegisterToClassForm.is_valid():
@@ -420,7 +422,6 @@ def Admin_Edit_Class(request):
         if AdminEditClassForm.is_valid():
             GuideId = AdminEditClassForm.cleaned_data.get('Guide')
             ClassId = AdminEditClassForm.cleaned_data.get('Class')
-         
             with open('users/classes.json', encoding="utf8") as db:
                 Ttable = json.load(db)    
             
@@ -501,6 +502,86 @@ def simpleuserDetailGuideS(request):
 
     context = {'inX': inX}
     return render(request, 'simpleuser/simpDetailGuideS.html', context)
+
+
+def adminDeleteChildFromClass(request):
+    if request.method == 'POST':
+        AdminDeleteChildFromClassForm = adminDeleteChildFromClassForm(request.POST)
+        context = {'AdminDeleteChildFromClassForm': AdminDeleteChildFromClassForm}
+        if AdminDeleteChildFromClassForm.is_valid():
+            y = AdminDeleteChildFromClassForm.cleaned_data.get('class')
+            y = y.split(',')
+            IDC = AdminDeleteChildFromClassForm.cleaned_data.get('ID_C')
+            print(type(IDC))
+
+            q1 = RegisterChild.objects.filter(idClass=y[0])
+            q1 = RegisterChild.objects.filter(ID_C=IDC)
+            q1.delete()
+            messages.success(request, f' succesfully deleted child from class !')
+            # value = RegisterChild.objects.all()
+    else:
+        AdminDeleteChildFromClassForm = adminDeleteChildFromClassForm()
+        context = {'AdminDeleteChildFromClassForm': AdminDeleteChildFromClassForm}
+    return render(request,'Admin1/adminDeleteChildFromClass.html', context)
+
+
+def HoursReportGuid(request):
+    value = HoursReport.objects.all()
+    table = []
+    for t in value:
+        if t.t_id == request.user.userprofile.t_id:
+            table.append([t.date, t.start_hour, t.finish_hour])
+
+    if request.method == 'POST':
+        hoursReportForm = HoursReportForm(request.POST)
+
+        if hoursReportForm.is_valid():
+            context = {'hoursReportForm': hoursReportForm, 'table': table}
+            ST = hoursReportForm.cleaned_data.get('start_hour')
+            FT = hoursReportForm.cleaned_data.get('finish_hour')
+            STN= ST.split(':')
+            FTN = FT.split(':')
+            dateG = request.POST.get('guideDatePicker')
+            if dateG=="":
+                messages.warning(request, f'No date entered')
+                return render(request, 'guide/HoursReportG.html', context)
+            for t in value:
+                if t.t_id==request.user.userprofile.t_id and t.start_hour ==ST and  FT==t.finish_hour and t.date==dateG:
+                    messages.warning(request, f'This hourly report already exists')
+                    hoursReportForm = HoursReportForm()
+
+
+                    return render(request, 'guide/HoursReportG.html', context)
+                if  int(STN[0])>=int(FTN[0]):
+                    messages.warning(request, f'Your start time is later than end time')
+                    hoursReportForm = HoursReportForm()
+
+                    return render(request, 'guide/HoursReportG.html', context)
+                tSTN=t.start_hour.split(':')
+                tFTN=t.finish_hour.split(':')
+                if t.t_id==request.user.userprofile.t_id and t.date==dateG and (int(tSTN[0])<int(STN[0])<int(tFTN[0]) or int(tSTN[0])<int(FTN[0])<int(tFTN[0]) or (int(STN[0])<int(tSTN[0]) and int(FTN[0])>int(tFTN[0]))):
+                    messages.warning(request, f'Times overlap with existing data')
+                    hoursReportForm = HoursReportForm()
+
+                    return render(request, 'guide/HoursReportG.html', context)
+
+            rc = HoursReport(t_id=request.user.userprofile.t_id, start_hour=ST, finish_hour=FT, date=dateG)
+            rc.save()
+            value = HoursReport.objects.all()
+            table=[]
+            for t in value:
+                if t.t_id==request.user.userprofile.t_id:
+                    table.append([t.date,t.start_hour,t.finish_hour])
+
+            context = {'hoursReportForm': hoursReportForm,'table':table}
+            messages.success(request, f' The Hours reporting succeeded  !')
+            return render(request, 'guide/HoursReportG.html', context)
+
+    else:
+        hoursReportForm = HoursReportForm()
+    context = {'hoursReportForm': hoursReportForm,'table':table}
+    return render(request, 'guide/HoursReportG.html', context)
+
 
 class guidUpdateView(UpdateView):
     model = UserProfile
