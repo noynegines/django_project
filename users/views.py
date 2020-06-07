@@ -548,20 +548,20 @@ def HoursReportGuid(request):
             for t in value:
                 if t.t_id==request.user.userprofile.t_id and t.start_hour ==ST and  FT==t.finish_hour and t.date==dateG:
                     messages.warning(request, f'This hourly report already exists')
-                    hoursReportForm = HoursReportForm()
+
 
 
                     return render(request, 'guide/HoursReportG.html', context)
                 if  int(STN[0])>=int(FTN[0]):
                     messages.warning(request, f'Your start time is later than end time')
-                    hoursReportForm = HoursReportForm()
+
 
                     return render(request, 'guide/HoursReportG.html', context)
                 tSTN=t.start_hour.split(':')
                 tFTN=t.finish_hour.split(':')
                 if t.t_id==request.user.userprofile.t_id and t.date==dateG and (int(tSTN[0])<int(STN[0])<int(tFTN[0]) or int(tSTN[0])<int(FTN[0])<int(tFTN[0]) or (int(STN[0])<int(tSTN[0]) and int(FTN[0])>int(tFTN[0]))):
                     messages.warning(request, f'Times overlap with existing data')
-                    hoursReportForm = HoursReportForm()
+
 
                     return render(request, 'guide/HoursReportG.html', context)
 
@@ -581,6 +581,29 @@ def HoursReportGuid(request):
         hoursReportForm = HoursReportForm()
     context = {'hoursReportForm': hoursReportForm,'table':table}
     return render(request, 'guide/HoursReportG.html', context)
+
+def tableReportGuide(request):
+    context={}
+    if request.method == 'POST':
+        SdateG = request.POST.get('SguideDatePicker')
+        FdateG = request.POST.get('FguideDatePicker')
+        tampSdateG=SdateG.split('-')
+        tempFdateG=FdateG.split('-')
+        nambertampSdateG=int(tampSdateG[0])+int(tampSdateG[1])*100+int(tampSdateG[2])
+        nambertempFdateG=int(tempFdateG[0])+int(tempFdateG[1])*100+int(tempFdateG[2])
+
+        value = HoursReport.objects.all()
+        table = []
+        for t in value:
+            tempdata=t.date.split('-')
+            tempdataN=int(tempdata[0])+int(tempdata[1])*100+int(tempdata[2])
+            if t.t_id==request.user.userprofile.t_id and nambertampSdateG<=tempdataN<=nambertempFdateG:
+                table.append([t.date, t.start_hour, t.finish_hour])
+
+
+        context = { 'table': table}
+
+    return render(request, 'guide/TableReportGuid.html', context)
 
 
 class guidUpdateView(UpdateView):

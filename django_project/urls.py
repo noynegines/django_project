@@ -43,6 +43,7 @@ urlpatterns = [
     path('DetailGuideS/',user_views.simpleuserDetailGuideS,name ='DetailGuideS'),
     path('DeleteChildFromClass/',user_views.adminDeleteChildFromClass,name ='DeleteChildFromClass'),
     path('hoursreportGuid/',user_views.HoursReportGuid,name ='hoursReportGuid'),
+    path('TablereportGuide/',user_views.tableReportGuide,name ='tablereportGuide'),
     path('', include('homepage.urls')),
     path('<int:pk>/guidUpdateView',user_views.guidUpdateView.as_view(),name='GuidUpdateView'),
 
