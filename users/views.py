@@ -3,6 +3,10 @@ from django.contrib import messages
 from .forms import UserRegisterForm , UserProfileForm , DeleteProfileForm , showGroupActiviesForm, addGroupActiviesForm,registerToClassForm , adminMatnasForm  , adminDeleteClassForm , adminEditClassForm , guideClassRegistersForm
 from users.models import UserProfile , RegisterChild
 import json
+from django.views.generic import (
+    UpdateView
+
+)
 from django import forms
 #import requests
 
@@ -466,3 +470,12 @@ def GuideShowRegistersByClass(request):
         context = {'x':x,'GuideClassRegistersForm': GuideClassRegistersForm}
     
     return render(request, 'guide/guideClassRegisters.html', context)
+
+class guidUpdateView(UpdateView):
+    model = UserProfile
+    template_name = 'guide/editDetails.html'
+    fields = ['aboutMe']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
