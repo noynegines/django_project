@@ -1,5 +1,8 @@
 pipeline {
 	  agent { docker { image 'python:3.8.2' } }
+	  triggers {
+	  	githubPush()
+	  }
 	  stages {
 	    stage('build') {
 	      steps {
@@ -15,8 +18,6 @@ pipeline {
 		    sh 'python -m pyflakes blog/'
 		    sh 'python -m pyflakes users/'
 		    sh 'python -m pyflakes homepage/' 
-		    coverage run --source=mypkg -m pytest tests/
-		    coveralls
 	         }
 	      }
 	      post {
