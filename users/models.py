@@ -8,6 +8,9 @@ class UserProfile(models.Model):
 	t_id = models.CharField(max_length=9, unique = True)
 	aboutMe=models.TextField(default='')
 
+	
+	
+	
 	def __str__(self):
 		return self.user.username
 
