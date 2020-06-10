@@ -9,6 +9,7 @@ from users.models import RegisterChild
 from users.views import register , GroupActivitiesTable , login1 , profile , TeacherTable , DeleteTeacher , AddActivitiesGroup , AdminGroupActivitiesTable ,registerToClass,showMyClasses,editDetails,ShowMyClass,Admin_Edit_Class,Admin_Delete_Class,GuideShowRegistersByClass,adminShowRegisters,adminShowRegistersByMatnas
 
 
+
 class TestUrls(TestCase):
 
 
