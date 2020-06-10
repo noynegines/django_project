@@ -17,6 +17,7 @@ pipeline {
 	      }
 	      post {
 	        success {
+		echo "Test succeed"
 		  mail to: 'noy552@gmail.com',
      		  subject: "Pipeline has succeed: ${currentBuild.fullDisplayName}",
 		  body: "The pipeline ${currentBuild.fullDisplayName} completed successfully."
