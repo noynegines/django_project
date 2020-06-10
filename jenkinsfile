@@ -24,12 +24,5 @@ pipeline {
 	        }
 	      }    
 	    }
-		
-	    stage('Performance tests') {
-              steps {
-                echo "-=- execute performance tests -=-"
-                sh "locust -f ./locustfile.py --no-web -c 1000 -r 100 --run-time 1m -H http://http://147.234.32.36/"
-              }
-            }
 	  }
 	}
