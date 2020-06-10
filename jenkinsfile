@@ -22,9 +22,6 @@ pipeline {
 	         }
 	      }
 	      post {
-	         always {
-                    junit 'test-reports/results.xml'
-                }
 	        success {
 		echo "Test succeed"
 		  mail to: 'group9831@gmail.com',
