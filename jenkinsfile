@@ -15,6 +15,7 @@ pipeline {
 		    sh 'python -m pyflakes blog/'
 		    sh 'python -m pyflakes users/'
 		    sh 'python -m pyflakes homepage/'
+		    junit 'test-results/**/*.xml'
 	            
 	         }
 	      }
