@@ -24,7 +24,7 @@ pipeline {
 	        }
 	        failure {
 		  echo "Test failed"
-		  mail to: 'noy552@gmail.com',
+		  mail to: 'group9831@gmail.com',
      		  subject: "Pipeline has failed: ${currentBuild.fullDisplayName}",
      		  body: "Error in ${env.BUILD_URL}"
 	        }
