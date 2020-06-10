@@ -5,6 +5,8 @@ from .models import UserProfile, RegisterChild
 import json
 
 
+
+
 class UserRegisterForm(UserCreationForm):
     
     email = forms.EmailField()
