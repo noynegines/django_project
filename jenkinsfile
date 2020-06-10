@@ -18,12 +18,11 @@ pipeline {
 		    sh 'python -m pyflakes blog/'
 		    sh 'python -m pyflakes users/'
 		    sh 'python -m pyflakes homepage/' 
-		    sh 'py.test --verbose --junit-xml test-reports/results.xml homepage/tests/test_views.py'
 	         }
 	      }
 	      post {
 	        success {
-		echo "Test succeed"
+		  echo "Test succeed"
 		  mail to: 'group9831@gmail.com',
      		  subject: "Pipeline has succeed: ${currentBuild.fullDisplayName}",
 		  body: "The pipeline ${currentBuild.fullDisplayName} completed successfully."
