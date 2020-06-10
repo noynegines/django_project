@@ -14,7 +14,7 @@ pipeline {
 	            sh 'python manage.py test homepage.tests' 
 		    sh 'python -m pyflakes blog/'
 		    sh 'python -m pyflakes users/'
-		    
+		    sh 'python -m pyflakes homepage/'
 	            
 	         }
 	      }
