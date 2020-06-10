@@ -15,7 +15,6 @@ pipeline {
 		    sh 'python -m pyflakes blog/'
 		    sh 'python -m pyflakes users/'
 		    sh 'python -m pyflakes homepage/' 
-		    sh 'docker run -v /var/coverage:/var/www/reports phpunit /src'
 	         }
 	      }
 	      post {
