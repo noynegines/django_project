@@ -17,10 +17,13 @@ pipeline {
 	      }
 	      post {
 	        success {
-	          sh 'echo success'
+		  mail to: 'noy552@gmail.com',
+     		  subject: "Pipeline has succeed: ${currentBuild.fullDisplayName}"
 	        }
 	        failure {
-	          junit 'build/reports/**/*.xml'
+		  mail to: 'noy552@gmail.com',
+     		  subject: "Pipeline has failed: ${currentBuild.fullDisplayName}",
+     		  body: "Error in ${env.BUILD_URL}"
 	        }
 	      }    
 	    }
