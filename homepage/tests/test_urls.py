@@ -1,12 +1,8 @@
-from django.contrib.auth.models import User
-from django.contrib.messages.middleware import MessageMiddleware
-from django.contrib.sessions.middleware import SessionMiddleware
-from django.test import SimpleTestCase, Client, RequestFactory, TestCase
+
+from django.test import  TestCase
 from django.urls import reverse , resolve
 from homepage.views import home , about
-from django_project import urls
-from users.models import RegisterChild
-from users.views import register , GroupActivitiesTable , login1 , profile , TeacherTable , DeleteTeacher , AddActivitiesGroup , AdminGroupActivitiesTable ,registerToClass,showMyClasses,editDetails,ShowMyClass,Admin_Edit_Class,Admin_Delete_Class,GuideShowRegistersByClass,adminShowRegisters,adminShowRegistersByMatnas
+from users.views import register , GroupActivitiesTable , login1 , profile , TeacherTable , DeleteTeacher , AddActivitiesGroup , AdminGroupActivitiesTable ,registerToClass,showMyClasses,editDetails,ShowMyClass,Admin_Edit_Class,Admin_Delete_Class,GuideShowRegistersByClass,adminShowRegisters,adminShowRegistersByMatnas , simpleuserDetailGuideS , adminDeleteChildFromClass  , tableReportGuide , HoursReportGuid
 
 
 class TestUrls(TestCase):
@@ -99,3 +95,27 @@ class TestUrls(TestCase):
 	 	url = reverse('showRegistersByMatnas')
 	 	self.assertEquals(resolve(url).func, adminShowRegistersByMatnas)
 
+
+	def test_simpleuserDetailGuideS(self):
+	 	url = reverse('DetailGuideS')
+	 	self.assertEquals(resolve(url).func, simpleuserDetailGuideS)
+
+
+	def test_adminDeleteChildFromClass(self):
+	 	url = reverse('DeleteChildFromClass')
+	 	self.assertEquals(resolve(url).func, adminDeleteChildFromClass) 
+
+
+#	def test_guidUpdateView(self):
+#	 	url = reverse('GuidUpdateView')
+#	 	self.assertEquals(resolve(url).func, guidUpdateView) 	
+	
+	def test_tableReportGuide(self):
+	 	url = reverse('tablereportGuide')
+	 	self.assertEquals(resolve(url).func, tableReportGuide) 
+
+	 	
+
+	def test_HoursReportGuid(self):
+	 	url = reverse('hoursReportGuid')
+	 	self.assertEquals(resolve(url).func, HoursReportGuid)  	

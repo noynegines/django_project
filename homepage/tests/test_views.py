@@ -1,15 +1,12 @@
-from django.test import TestCase , Client
-from django.urls import reverse 
-import json
+
 from django.contrib.auth.models import User
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.test import SimpleTestCase, Client, RequestFactory, TestCase
-from django.urls import reverse , resolve
-from homepage.views import home , about
-from django_project import urls
+from django.test import Client, RequestFactory, TestCase
+from django.urls import reverse
+
 from users.models import RegisterChild
-from users.views import register , GroupActivitiesTable , login1 , profile , TeacherTable , DeleteTeacher , AddActivitiesGroup , AdminGroupActivitiesTable ,registerToClass,showMyClasses,editDetails,ShowMyClass,Admin_Edit_Class,Admin_Delete_Class,GuideShowRegistersByClass,adminShowRegisters,adminShowRegistersByMatnas
+from users.views import GroupActivitiesTable , AdminGroupActivitiesTable ,registerToClass,showMyClasses,adminShowRegisters,adminShowRegistersByMatnas, adminDeleteChildFromClass , simpleuserDetailGuideS
 
 
 
@@ -131,3 +128,35 @@ class TestViews(TestCase):
 
 	 	response = self.client.get(adminShowRegistersByMatnas(request), follow = True)
 	 	self.assertEqual(response.status_code, 404)
+
+	def test_adminDeleteChildFromClass1(self):
+	 	request = self.factory.get('Admin1/adminDeleteChildFromClass.html')
+	 	self.client.force_login(self.user_admin)
+	 	request.user_admin = self.user_admin
+	 	middleware = SessionMiddleware()
+	 	middleware.process_request(request)
+	 	request.session.save()
+	 	middleware = MessageMiddleware()
+	 	middleware.process_request(request)
+	 	request.session.save()
+	 	response = self.client.get(adminDeleteChildFromClass(request), follow = True)
+	 	self.assertEqual(response.status_code, 404) 	
+
+
+
+	def test_simpleuserDetailGuideS1(self):
+	 	request = self.factory.get('simpleuser/simpDetailGuideS.html')
+	 	self.client.force_login(self.user)
+	 	request.user = self.user
+	 	middleware = SessionMiddleware()
+	 	middleware.process_request(request)
+	 	request.session.save()
+	 	middleware = MessageMiddleware()
+	 	middleware.process_request(request)
+	 	request.session.save()
+
+	 	response = self.client.get(simpleuserDetailGuideS(request), follow = True)
+	 	self.assertEqual(response.status_code, 404)
+
+
+	

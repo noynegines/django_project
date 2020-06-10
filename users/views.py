@@ -7,9 +7,8 @@ from django.views.generic import (
     UpdateView
 
 )
-from datetime import datetime
-from django import forms
-#import requests
+
+
 
 def register(request):
     if request.method == 'POST':
@@ -85,11 +84,11 @@ def DeleteTeacher(request):
                     json.dump(Ttable, newF, indent=1)
                 instance = UserProfile.objects.get(t_id=deleteProfileForm.given_id).user
                 instance.delete()
-                messages.success(request, f' succesfully deleted the guide !')
+                messages.success(request, ' succesfully deleted the guide !')
                 return render(request, 'Admin1/homeAdmin.html')
 
             else:
-                messages.warning(request, f' id doesnt exist !!!!!!!')
+                messages.warning(request, ' id doesnt exist !!!!!!!')
                 return render(request, 'Admin1/deleteTeacher.html', context)
     else:
         deleteProfileForm = DeleteProfileForm()
@@ -126,7 +125,7 @@ def GroupActivitiesTable(request):
                     inX=[]
 
         else:
-            messages.success(request, f' not valid form !') 
+            messages.success(request, ' not valid form !')
 
         context = { 'ShowGroupActiviesForm' : ShowGroupActiviesForm , 'Ttable': Ttable , 'x' : x }
         return render(request,'simpleuser/GroupActivitiesTable.html',context)
@@ -148,17 +147,16 @@ def AddActivitiesGroup(request):
             maxAge = AddGroupActiviesForm.cleaned_data.get('ageMax')
             minAge = AddGroupActiviesForm.cleaned_data.get('ageMin')
             if (int(maxAge) - int(minAge) < 0):
-                messages.warning(request, f' min age is bigger than max age !')
+                messages.warning(request, ' min age is bigger than max age !')
                 return render(request, 'Admin1/AddActivitiesGroup.html', context)
             teacherID = AddGroupActiviesForm.cleaned_data.get('given_id')
             all_tids = UserProfile.objects.values_list('t_id', flat=True).distinct()
             if (teacherID not in all_tids):
-                messages.warning(request, f' there is no guide with this id  !')
+                messages.warning(request, ' there is no guide with this id  !')
                 return render(request, 'Admin1/AddActivitiesGroup.html', context)
             given_groupActivity = AddGroupActiviesForm.cleaned_data.get('nameClas')
             y = AddGroupActiviesForm.cleaned_data.get('select')
             y = y.split(',')
-            groupActivityList = []
             with open('users/classes.json', encoding="utf8") as db:
                 Ttable = json.load(db)
             i=0
@@ -166,7 +164,7 @@ def AddActivitiesGroup(request):
                 if i<item["idC"]:
                     i=item["idC"]
                 if ( item["class-name"].replace(' ', '')== given_groupActivity.replace(' ', '') and item["neighborhood"].replace(' ', '') == y[2].replace(' ', '') and item["phone"].replace(' ', '') == y[1].replace(' ', '') and item["location"].replace(' ', '') == y[0].replace(' ', '') and item["min-age"].replace(' ', '') == minAge and item["max-age"].replace(' ', '') == maxAge ):
-                    messages.warning(request, f' group activity already exist  !')
+                    messages.warning(request, ' group activity already exist  !')
                     return render(request, 'Admin1/AddActivitiesGroup.html', context)
             i=i+1
             newl={"location": " ", "phone": " ", "neighborhood": " ", "category": " ", "subcategory": " ", "class-name": " ", "min-age": "", "max-age": "", "audience": " ","guide":" ","idC":0}
@@ -183,7 +181,7 @@ def AddActivitiesGroup(request):
                 json.dump(Ttable , newF , indent = 1)
 
 
-            messages.success(request, f' added succesfully the group activity !')
+            messages.success(request, ' added succesfully the group activity !')
             return render(request, 'Admin1/homeAdmin.html', context)
 
     else:
@@ -254,11 +252,11 @@ def registerToClass(request):
 
             for item in t:
                 if item.ID_C == ID_C and (item.FName_C != FName_C or item.LName_C != LName_C):
-                    messages.warning(request, f'your id is already exist whit other name')
+                    messages.warning(request, 'your id is already exist whit other name')
                     return render(request, 'simpleuser/registerToClass.html', context)
 
                 if item.ID_C == ID_C and item.idClass == IDclass :
-                    messages.warning(request, f'you are already sign to this class')
+                    messages.warning(request, 'you are already sign to this class')
                     return render(request, 'simpleuser/registerToClass.html', context)
 
                 with open('users/classes.json', encoding="utf8") as db:
@@ -268,16 +266,15 @@ def registerToClass(request):
                     if row["idC"] == int(IDclass) :
                         minA =row["min-age"]
                         maxA = row["max-age"]
-                        print(type( maxA))
-                        print(minA,minA)
+
                         if  int(Age_C) > int(maxA) or int(Age_C) < int(minA) :
-                            messages.warning(request, f'your age is not in the range')
+                            messages.warning(request, 'your age is not in the range')
                             return render(request, 'simpleuser/registerToClass.html', context)
 
             rc = RegisterChild(ID_P=ID_P , ID_C=ID_C , FName_C = FName_C , LName_C = LName_C , Age_C = Age_C ,
             Phone_P = Phone_P , idClass = IDclass )
             rc.save()
-            messages.success(request, f' The registration for the class was successful !')
+            messages.success(request, ' The registration for the class was successful !')
             return render(request, 'simpleuser/homeSimpleuser.html',context)
         
     else:
@@ -386,7 +383,6 @@ def adminShowRegistersByMatnas(request):
 
 def Admin_Delete_Class(request):
     if request.method == 'POST':
-        print("spir")
         AdminDeleteClassForm = adminDeleteClassForm(request.POST)
         if AdminDeleteClassForm.is_valid():
             IDclass = AdminDeleteClassForm.cleaned_data.get('select')
@@ -399,7 +395,7 @@ def Admin_Delete_Class(request):
                     Ttable.remove(item)
                     with open('users/classes.json', 'w' , encoding="utf8") as newF:
                         json.dump(Ttable , newF , indent = 1)
-                    messages.success(request, f'deleted successfully !')
+                    messages.success(request, 'deleted successfully !')
                     break
 
             value = RegisterChild.objects.all()
@@ -408,9 +404,9 @@ def Admin_Delete_Class(request):
                     child.delete()
         return render(request, 'Admin1/homeAdmin.html')
     else:
-        print("adva")
+
         AdminDeleteClassForm = adminDeleteClassForm()
-        print("zzzzzzzzzzzz")
+
     context = {'AdminDeleteClassForm': AdminDeleteClassForm}
     return render(request, 'Admin1/DeleteClass.html', context)
 
@@ -434,7 +430,7 @@ def Admin_Edit_Class(request):
                         json.dump(Ttable , newF , indent = 1)
                     break
                     
-        messages.success(request, f'edited successfully !')  
+        messages.success(request, 'edited successfully !')
         return render(request, 'Admin1/homeAdmin.html')           
 
             
@@ -474,10 +470,9 @@ def GuideShowRegistersByClass(request):
     else:
         GuideClassRegistersForm = guideClassRegistersForm(request.user.userprofile.t_id)
         context = {'x':x,'GuideClassRegistersForm': GuideClassRegistersForm}
-    
+
     return render(request, 'guide/guideClassRegisters.html', context)
 def simpleuserDetailGuideS(request):
-    x = []
     inX = []
     tid = request.user.id
 
@@ -512,13 +507,13 @@ def adminDeleteChildFromClass(request):
             y = AdminDeleteChildFromClassForm.cleaned_data.get('class')
             y = y.split(',')
             IDC = AdminDeleteChildFromClassForm.cleaned_data.get('ID_C')
-            print(type(IDC))
+
 
             q1 = RegisterChild.objects.filter(idClass=y[0])
             q1 = RegisterChild.objects.filter(ID_C=IDC)
             q1.delete()
-            messages.success(request, f' succesfully deleted child from class !')
-            # value = RegisterChild.objects.all()
+            messages.success(request, ' succesfully deleted child from class !')
+
     else:
         AdminDeleteChildFromClassForm = adminDeleteChildFromClassForm()
         context = {'AdminDeleteChildFromClassForm': AdminDeleteChildFromClassForm}
@@ -543,27 +538,27 @@ def HoursReportGuid(request):
             FTN = FT.split(':')
             dateG = request.POST.get('guideDatePicker')
             if dateG=="":
-                messages.warning(request, f'No date entered')
+                messages.warning(request, 'No date entered')
                 return render(request, 'guide/HoursReportG.html', context)
             for t in value:
                 if t.t_id==request.user.userprofile.t_id and t.start_hour ==ST and  FT==t.finish_hour and t.date==dateG:
-                    messages.warning(request, f'This hourly report already exists')
+                    messages.warning(request, 'This hourly report already exists')
 
 
 
                     return render(request, 'guide/HoursReportG.html', context)
                 if  int(STN[0])>=int(FTN[0]):
-                    messages.warning(request, f'Your start time is later than end time')
+                    messages.warning(request, 'Your start time is later than end time')
 
 
                     return render(request, 'guide/HoursReportG.html', context)
                 tSTN=t.start_hour.split(':')
                 tFTN=t.finish_hour.split(':')
                 if t.t_id==request.user.userprofile.t_id and t.date==dateG and (int(tSTN[0])<int(STN[0])<int(tFTN[0]) or int(tSTN[0])<int(FTN[0])<int(tFTN[0]) or (int(STN[0])<int(tSTN[0]) and int(FTN[0])>int(tFTN[0]))):
-                    messages.warning(request, f'Times overlap with existing data')
+                    messages.warning(request, 'Times overlap with existing data')
 
 
-                    return render(request, 'guide/HoursReportG.html', context)
+                    return render(request,'guide/HoursReportG.html', context)
 
             rc = HoursReport(t_id=request.user.userprofile.t_id, start_hour=ST, finish_hour=FT, date=dateG)
             rc.save()
@@ -574,7 +569,7 @@ def HoursReportGuid(request):
                     table.append([t.date,t.start_hour,t.finish_hour])
 
             context = {'hoursReportForm': hoursReportForm,'table':table}
-            messages.success(request, f' The Hours reporting succeeded  !')
+            messages.success(request, ' The Hours reporting succeeded  !')
             return render(request, 'guide/HoursReportG.html', context)
 
     else:
@@ -605,6 +600,28 @@ def tableReportGuide(request):
 
     return render(request, 'guide/TableReportGuid.html', context)
 
+
+def GuideShowphonChildren(request):
+    x = []
+    inX = []
+    with open('users/classes.json', encoding="utf8") as db:
+        Ttable = json.load(db)
+    for y in Ttable:
+        if (request.user.userprofile.t_id.replace(' ', '') == y["guide"].replace(' ', '')):
+            value = RegisterChild.objects.all()
+            for item in value:
+                if int(item.idClass)==int(y["idC"]):
+                    temp=[item.ID_P,item.ID_C,item.FName_C,item.LName_C,item.Phone_P]
+                    if temp not in x:
+                        inX.append(item.ID_P)
+                        inX.append(item.ID_C)
+                        inX.append(item.FName_C)
+                        inX.append(item.LName_C)
+                        inX.append(item.Phone_P)
+                        x.append(inX)
+                        inX = []
+    context = {'x': x}
+    return render(request, 'guide/phonChildrenG.html', context)
 
 class guidUpdateView(UpdateView):
     model = UserProfile

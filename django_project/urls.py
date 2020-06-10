@@ -44,6 +44,8 @@ urlpatterns = [
     path('DeleteChildFromClass/',user_views.adminDeleteChildFromClass,name ='DeleteChildFromClass'),
     path('hoursreportGuid/',user_views.HoursReportGuid,name ='hoursReportGuid'),
     path('TablereportGuide/',user_views.tableReportGuide,name ='tablereportGuide'),
+    path('guideShowphonChildren/',user_views.GuideShowphonChildren,name ='showphonC'),
+
     path('', include('homepage.urls')),
     path('<int:pk>/guidUpdateView',user_views.guidUpdateView.as_view(),name='GuidUpdateView'),
 
