@@ -18,9 +18,13 @@ pipeline {
 		    sh 'python -m pyflakes blog/'
 		    sh 'python -m pyflakes users/'
 		    sh 'python -m pyflakes homepage/' 
+		    sh 'py.test --verbose --junit-xml test-reports/results.xml homepage/tests/test_views.py'
 	         }
 	      }
 	      post {
+	         always {
+                    junit 'test-reports/results.xml'
+                }
 	        success {
 		echo "Test succeed"
 		  mail to: 'group9831@gmail.com',
