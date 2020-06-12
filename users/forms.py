@@ -57,8 +57,6 @@ class showGroupActiviesForm(forms.ModelForm):
         fields = [ 'age'  ]
 
 
-
-
 class addGroupActiviesForm(forms.ModelForm):
     CHOICES = (
         ( "אשכול פיס,08-6434775,שכונה ט'","location: אשכול פיס ,neighborhood:שכונה ט "),
