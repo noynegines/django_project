@@ -39,7 +39,7 @@ pipeline {
 	   stage('Dependency vulnerability tests') {
             steps {
                 echo "-=- run dependency vulnerability tests -=-"
-                sh 'safety check'
+                sh 'safety check --full-report'
             }
 	   }
 	  }
