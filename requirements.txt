@@ -17,5 +17,3 @@ appdirs==1.4.3
 	pyflakes==2.2.0
 	coverage==5.1
 	safety==1.9.0
-	locustio
-
