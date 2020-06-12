@@ -18,7 +18,6 @@ pipeline {
 		    sh 'python -m pyflakes blog/'
 		    sh 'python -m pyflakes users/'
 		    sh 'python -m pyflakes homepage/'
-		    sh 'python -m coverage run test_urls.py'
 	         }
 	      }
 	      post {
@@ -36,5 +35,11 @@ pipeline {
 	        }
 	      }    
 	    }
+	   stage('Dependency vulnerability tests') {
+            steps {
+                echo "-=- run dependency vulnerability tests -=-"
+                sh "safety check"
+            }
+	   }
 	  }
 	}
