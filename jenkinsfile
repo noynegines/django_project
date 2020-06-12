@@ -35,12 +35,6 @@ pipeline {
 	        }
 	      }    
 	    }
-	   stage('Dependency vulnerability tests') {
-            steps {
-                echo "-=- run dependency vulnerability tests -=-"
-		sh 'pip install safety'
-                sh 'safety check'
-            }
 	   }
 	  }
 	}
