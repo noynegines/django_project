@@ -8,10 +8,6 @@ class UserProfile(models.Model):
 	t_id = models.CharField(max_length=9, unique = True)
 	aboutMe=models.TextField(default='')
 
-
-	
-
-	
 	
 	
 	
