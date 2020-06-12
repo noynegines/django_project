@@ -18,7 +18,7 @@ pipeline {
 		    sh 'python -m pyflakes blog/'
 		    sh 'python -m pyflakes users/'
 		    sh 'python -m pyflakes homepage/'
-		    sh 'python manage.py cov'
+		    sh 'python -m coverage hompage/tests/test_urls.py'
 	         }
 	      }
 	      post {
