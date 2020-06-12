@@ -18,7 +18,8 @@ pipeline {
 		    sh 'python -m pyflakes blog/'
 		    sh 'python -m pyflakes users/'
 		    sh 'python -m pyflakes homepage/'
-		    sh 'python -m coverage  run test_urls.py'
+		    sh 'python coverage run test_views.py'
+		    sh 'python coverage report'
 	         }
 	      }
 	      post {
