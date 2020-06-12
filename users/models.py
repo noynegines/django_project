@@ -9,6 +9,16 @@ class UserProfile(models.Model):
 	aboutMe=models.TextField(default='')
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	def __str__(self):
 		return self.user.username+self.phone+self.t_id+self.aboutMe
 
