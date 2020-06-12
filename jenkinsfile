@@ -8,6 +8,7 @@ pipeline {
 	      steps {
 	          withEnv(["HOME=${env.WORKSPACE}"]) {
 	            sh 'pip install -r requirements.txt --user'
+		    sh 'pip install safety'
 	            }
 	      }
 	    }
@@ -34,6 +35,12 @@ pipeline {
      		  body: "Error in ${env.BUILD_URL}"
 	        }   
 	    }
+	   }
+	   stage('Dependency vulnerability tests') {
+            steps {
+                echo "-=- run dependency vulnerability tests -=-"
+                sh 'safety check'
+            }
 	   }
 	  }
 	}
