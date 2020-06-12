@@ -10,9 +10,7 @@ class UserProfile(models.Model):
 
 
 	
-	
-	
-	
+
 	
 	
 	
