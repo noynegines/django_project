@@ -6,7 +6,7 @@ appdirs==1.4.3
 	django-form-utils==1.0.3
 	filelock==3.0.12
 	pbr==5.4.4
-	Pillow==7.1.1
+	Pillow==9.3.0
 	pytz==2019.3
 	six==1.14.0
 	sqlparse==0.3.1
